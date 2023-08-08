@@ -1,0 +1,32 @@
+﻿@model List<Category>
+
+<a href="/category/create">
+    Ekle
+</a>
+<table>
+    <tr>
+        <th>Id</th>
+        <th>User_id</th>
+        <th>Name</th>
+        <th>Edit/Remove</th>
+    </tr>
+    
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.id</td>
+            <td>@item.user_id</td>
+            <td>@item.name</td>
+            <td>
+                <a href="/category/update/@item.id">
+                    Edit
+                </a>
+
+                <a href ="/category/delete/@item.id">
+                    Remove
+                </a>
+
+            </td>
+        </tr>
+    }
+</table>
