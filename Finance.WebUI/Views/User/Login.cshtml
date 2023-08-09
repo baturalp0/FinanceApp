@@ -1,36 +1,47 @@
 ﻿@model User
 
-<form asp-controller="User" asp-action="Login" method="post">
+<div class="d-flex justify-content-center align-items-center" style="min-height: 60vh;">
+    <div class="col-md-4">
 
-    <label>E-mail</label><br>
-    <input asp-for="email"><br>
-    <label>Şifre</label><br>
-    <input asp-for="password"><br><br>
-    <button type="submit">Giriş Yap</button>
-</form>
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success custom-alert">@TempData["SuccessMessage"]</div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger custom-alert">@TempData["ErrorMessage"]</div>
+        }
 
-@if (TempData["SuccessMessage"] != null)
-{
-    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
-}
-@if (TempData["ErrorMessage"] != null)
-{
-    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
-}
+        
+        <form asp-controller="User" asp-action="Login" method="post">
+            <div class="mb-3">
+                <label for="email" class="form-label">E-mail Adresi</label>
+                <input type="email" class="form-control" asp-for="email">
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Şifre</label>
+                <input type="password" class="form-control" asp-for="password">
+            </div>
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="rememberCheck">
+                <label class="form-check-label" for="rememberCheck">Beni Hatırla</label>
+            </div>
+            <button type="submit" class="btn btn-primary">Giriş Yap</button>
+        </form>
 
-<form>
-    <div class="mb-3">
-        <label for="exampleInputEmail1" class="form-label">Email address</label>
-        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+        
+
     </div>
-    <div class="mb-3">
-        <label for="exampleInputPassword1" class="form-label">Password</label>
-        <input type="password" class="form-control" id="exampleInputPassword1">
-    </div>
-    <div class="mb-3 form-check">
-        <input type="checkbox" class="form-check-input" id="exampleCheck1">
-        <label class="form-check-label" for="exampleCheck1">Check me out</label>
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+</div>
+
+<style>
+    .form-control {
+        width: 100%;
+        height: 40px;
+    }
+
+    .custom-alert {
+        max-width: 300px; /* İstediğiniz genişliği ayarlayın */
+        margin: 10px auto; /* Merkezde görünmesi için */
+    }
+</style>

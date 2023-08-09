@@ -1,39 +1,44 @@
 ﻿@model List<Amount>
 
-<a class="btn btn-primary" href="/category/create">
-    Ekle
-</a>
+
+
+
+
 
 <div class="table-responsive">
     <table class="table table-bordered table-striped table-hover">
         <tr>
-            <th>id</th>
-            <th>user_id</th>
-            <th>amount</th>
-            <th>type_</th>
-            <th>name</th>
+            <th>#</th>
+            <th>Başlık</th>
+            <th>Miktar</th>
+            <th>Gelir/Gider</th>
+            <th>Edit/Remove</th>
         </tr>
 
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.id</td>
-                <td>@item.user_id</td>
-                <td>@item.amount</td>
-                <td>@item.type_</td>
-                <td>@item.name</td>
-                <td>
-                    <a class="btn btn-warning" href="/category/update/@item.id">
-                        Edit
-                    </a>
+        @{
+            var count = 1;
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@count</td>
+                    <td>@item.name</td>
+                    <td>@item.amount</td>
+                    <td>@item.type_</td>
+                    <td>
+                        <a class="btn btn-outline-warning"  href="/amount/update/@item.id">
+                            Edit
+                        </a>
 
-                    <a class="btn btn-danger" href="/category/delete/@item.id">
-                        Remove
-                    </a>
+                        <a class="btn btn-outline-danger"  href="/amount/delete/@item.id">
+                            Remove
+                        </a>
 
-                </td>
-            </tr>
+                    </td>
+                </tr>
+                count = count + 1;
+            }
         }
+
     </table>
 
 

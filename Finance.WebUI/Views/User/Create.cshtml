@@ -1,12 +1,37 @@
 ﻿@model User
 
-<form asp-controller="User" asp-action="Create" method="post">
+<div class="d-flex justify-content-center align-items-center" style="min-height: 60vh;">
+    <div class="col-md-4">
 
-    <label>Takma İsim:</label><br>
-    <input asp-for="nick_name"><br>
-    <label>E-mail</label><br>
-    <input asp-for="email"><br>
-    <label>Şifre</label><br>
-    <input asp-for="password"><br><br>
-    <button type="submit">Kayıt Ol</button>
-</form>
+        <form asp-controller="User" asp-action="Create" method="post">
+            <div class="mb-3">
+                <label for="nick_name" class="form-label">Takma İsim</label>
+                <input type="text" class="form-control" asp-for="nick_name">
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">E-mail Adresi</label>
+                <input type="email" class="form-control" asp-for="email">
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Şifre</label>
+                <input type="password" class="form-control" asp-for="password">
+            </div>
+            <button type="submit" class="btn btn-primary">Kayıt ol</button>
+        </form>
+
+
+
+    </div>
+</div>
+
+<style>
+    .form-control {
+        width: 100%;
+        height: 40px;
+    }
+
+    .custom-alert {
+        max-width: 300px; /* İstediğiniz genişliği ayarlayın */
+        margin: 10px auto; /* Merkezde görünmesi için */
+    }
+</style>

@@ -52,7 +52,7 @@ namespace Finance.WebUI.Controllers
             }
             else
             {
-                TempData["ErrorMessage"] = "Geçersiz kullanıcı adı veya şifre";
+                TempData["ErrorMessage"] = "Geçersiz mail adresi veya şifre";
             }
             return RedirectToAction("Login"); // Aynı view'a yönlendiriyoruz
         }

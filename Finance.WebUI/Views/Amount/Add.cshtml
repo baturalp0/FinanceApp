@@ -1,0 +1,22 @@
+﻿@model Amount
+
+<form asp-controller="Amount" asp-action="Add" method="post">
+    <div class="mb-3">
+        <label for="name" class="form-label">İşlem</label>
+        <input type="text" class="form-control" asp-for="name">
+    </div>
+    <div class="mb-3">
+        <label for="amount" class="form-label">Miktar</label>
+        <input type="number" class="form-control" asp-for="amount">
+    </div>
+    <div class="mb-3">
+        <label for="user_id" class="form-label">user_id</label>
+        <input type="number" class="form-control" asp-for="user_id">
+    </div>
+    <button type="submit" class="btn btn-success" name="actionType" value="Gelir">Gelir</button>
+    <button type="submit" class="btn btn-danger" name="actionType" value="Gider">Gider</button>
+</form>
+
+@*butonlar doğru çalışıyor ama form doldurulurken entera basınca kaydetmesini ayarlayamadım.*@
+
+

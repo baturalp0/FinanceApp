@@ -17,14 +17,12 @@ namespace Finance.Services
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new CategoryConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new AmountConfiguration());
 
             base.OnModelCreating(modelBuilder);
         }
 
-        public DbSet<Category> Categories { get; set; } 
         public DbSet<User> Users { get; set; } 
         public DbSet<Amount> Amounts { get; set; } 
 
