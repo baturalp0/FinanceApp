@@ -1,4 +1,4 @@
-﻿@model List<Category>
+﻿@model List<Amount>
 
 <a class="btn btn-primary" href="/category/create">
     Ekle
@@ -7,10 +7,11 @@
 <div class="table-responsive">
     <table class="table table-bordered table-striped table-hover">
         <tr>
-            <th>Id</th>
-            <th>User_id</th>
-            <th>Name</th>
-            <th>Edit/Remove</th>
+            <th>id</th>
+            <th>user_id</th>
+            <th>amount</th>
+            <th>type_</th>
+            <th>name</th>
         </tr>
 
         @foreach (var item in Model)
@@ -18,6 +19,8 @@
             <tr>
                 <td>@item.id</td>
                 <td>@item.user_id</td>
+                <td>@item.amount</td>
+                <td>@item.type_</td>
                 <td>@item.name</td>
                 <td>
                     <a class="btn btn-warning" href="/category/update/@item.id">
@@ -35,6 +38,3 @@
 
 
 </div>
-
-
-

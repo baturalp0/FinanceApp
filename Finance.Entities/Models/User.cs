@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Finance.Entities.Models
 {
-    public class user
+    public class User
     {
         public int id { get; set; }
         public string nick_name { get; set; }

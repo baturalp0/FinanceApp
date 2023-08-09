@@ -1,0 +1,12 @@
+﻿@model User
+
+<form asp-controller="User" asp-action="Create" method="post">
+
+    <label>Takma İsim:</label><br>
+    <input asp-for="nick_name"><br>
+    <label>E-mail</label><br>
+    <input asp-for="email"><br>
+    <label>Şifre</label><br>
+    <input asp-for="password"><br><br>
+    <button type="submit">Kayıt Ol</button>
+</form>

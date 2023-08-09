@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace Finance.Services
 {
-    public class CategoryConfiguration : IEntityTypeConfiguration<Category>
+    internal class UserConfiguration : IEntityTypeConfiguration<User>
     {
-        public void Configure(EntityTypeBuilder<Category> builder)
+
+        public void Configure(EntityTypeBuilder<User> builder)
         {
-            builder.ToTable("category");
+            builder.ToTable("users");
         }
-       
     }
 }
