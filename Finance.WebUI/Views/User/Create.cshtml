@@ -6,6 +6,7 @@
 
 <div class="d-flex justify-content-center align-items-center" style="min-height: 60vh;">
     <div class="col-md-4">
+        <div class="m-4"></div>
 
         <form asp-controller="User" asp-action="Create" method="post">
 
@@ -28,7 +29,16 @@
                 <span asp-validation-for="password" class="text-danger"></span>
 
             </div>
-            <button type="submit" class="btn btn-primary">Kayıt ol</button>
+            <button type="submit" class="btn btn-primary" style="width: 100%; display: block; font-size: 18px;">
+                Kayıt Ol
+            </button>
+
+            <div class="m-4"></div>
+
+            <div style="text-align: center;">
+                <p>Zaten bir hesabınız var mı? <a asp-controller="User" asp-action="GoToCreate">Hemen giriş yapın!</a> </p>
+            </div>
+
         </form>
 
 

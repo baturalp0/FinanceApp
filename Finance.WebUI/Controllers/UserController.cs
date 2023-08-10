@@ -52,7 +52,6 @@ namespace Finance.WebUI.Controllers
         {
             var user = _context.Users.FirstOrDefault(x => x.email == model.email && x.password == model.password);
 
-
             if (user != null)
             {
                 //Session'a bilgileri atıyoruz.
@@ -61,25 +60,34 @@ namespace Finance.WebUI.Controllers
                 HttpContext.Session.SetString("password",user.password);
                 HttpContext.Session.SetString("email",user.email);
 
-                var result = HttpContext.Session.GetString("id");
-
-                TempData["SuccessMessage"] = "Giriş Başarılı";
-
-                var result2 = User.Identity.Name;
-
                 return RedirectToAction("List", "Amount"); // Aynı view'a yönlendiriyoruz
             }
             else
             {
                 TempData["ErrorMessage"] = "Geçersiz mail adresi veya şifre";
-
                 return RedirectToAction("Login"); // Aynı view'a yönlendiriyoruz
-
             }
 
+        }
 
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Remove("id");
+            HttpContext.Session.Remove("nick_name");
+            HttpContext.Session.Remove("password");
+            HttpContext.Session.Remove("email");
 
+            return RedirectToAction("Login");
+        }
 
+        public IActionResult GoToLogin()
+        {
+            return RedirectToAction("Create");
+        }
+
+        public IActionResult GoToCreate()
+        {
+            return RedirectToAction("Login");
         }
 
     }
