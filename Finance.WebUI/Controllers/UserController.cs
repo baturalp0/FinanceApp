@@ -29,9 +29,13 @@ namespace Finance.WebUI.Controllers
         [HttpPost]
         public IActionResult Create(User model)
         {
-            _context.Users.Add(model);
-            _context.SaveChanges();
-            return RedirectToAction("List");
+            if (ModelState.IsValid)
+            {
+                _context.Users.Add(model);
+                _context.SaveChanges();
+                return RedirectToAction("List");
+            }
+            return View(model);
         }
 
         [HttpGet]

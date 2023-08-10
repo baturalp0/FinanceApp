@@ -21,7 +21,13 @@ namespace Finance.WebUI.Controllers
         public IActionResult List()
         {
             var amounts = _context.Amounts.Where(x => x.user_id == 1).ToList();
-            return View(amounts);
+
+            AmountViewModel viewModel = new AmountViewModel();
+            viewModel.AmountList = amounts;
+            viewModel.Amount = null;
+
+
+            return View(viewModel);
         }
 
         [HttpGet]
@@ -33,19 +39,21 @@ namespace Finance.WebUI.Controllers
         [HttpPost]
         public IActionResult Add(Amount model, string actionType)
         {
-
-            if (actionType == "Gelir")
+            if (ModelState.IsValid)
             {
-                model.type_ = true;
+                if (actionType == "Gelir")
+                {
+                    model.type_ = true;
+                }
+                else if (actionType == "Gider")
+                {
+                    model.type_ = false;
+                }
+                _context.Amounts.Add(model);
+                _context.SaveChanges();
+                return RedirectToAction("List");
             }
-            else if (actionType == "Gider")
-            {
-                model.type_ = false;
-            }
-
-            _context.Amounts.Add(model);
-            _context.SaveChanges();
-            return RedirectToAction("List");
+            return View(model);
         }
 
 

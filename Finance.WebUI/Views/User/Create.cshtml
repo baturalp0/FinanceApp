@@ -1,23 +1,37 @@
 ﻿@model User
 
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}
+
 <div class="d-flex justify-content-center align-items-center" style="min-height: 60vh;">
     <div class="col-md-4">
 
         <form asp-controller="User" asp-action="Create" method="post">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
             <div class="mb-3">
                 <label for="nick_name" class="form-label">Takma İsim</label>
                 <input type="text" class="form-control" asp-for="nick_name">
+                <span asp-validation-for="nick_name" class="text-danger"></span>
             </div>
             <div class="mb-3">
                 <label for="email" class="form-label">E-mail Adresi</label>
                 <input type="email" class="form-control" asp-for="email">
+                <span asp-validation-for="email" class="text-danger"></span>
+
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Şifre</label>
                 <input type="password" class="form-control" asp-for="password">
+                <span asp-validation-for="password" class="text-danger"></span>
+
             </div>
             <button type="submit" class="btn btn-primary">Kayıt ol</button>
         </form>
+
+
 
 
 
