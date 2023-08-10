@@ -1,5 +1,9 @@
 ﻿@model User
 
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}
+
 <div class="d-flex justify-content-center align-items-center" style="min-height: 60vh;">
     <div class="col-md-4">
 
@@ -17,10 +21,12 @@
             <div class="mb-3">
                 <label for="email" class="form-label">E-mail Adresi</label>
                 <input type="email" class="form-control" asp-for="email">
+                <span asp-validation-for="email" class="text-danger"></span>
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Şifre</label>
                 <input type="password" class="form-control" asp-for="password">
+                <span asp-validation-for="password" class="text-danger"></span>
             </div>
             <div class="mb-3 form-check">
                 <input type="checkbox" class="form-check-input" id="rememberCheck">

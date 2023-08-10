@@ -10,25 +10,8 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-dark bg-primary navbar-expand-lg bg-body-tertiary">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#a">
-                    <img src="/lib/budget.png" alt="Bootstrap" width="50" height="44">
-                </a>
-                <a class="navbar-brand" href="#b">Finance</a>
-
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#c">Ana Sayfa</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#d">Profil</a>
-                    </li>
-                </ul>
-                <button type="button" class="btn btn-outline-light">Çıkış Yap</button>
-
-            </div>
-        </nav>
+        <partial name="NavPartial" model="Model" />
+       
     </header>
     <div class="container">
         <main role="main" class="pb-3">

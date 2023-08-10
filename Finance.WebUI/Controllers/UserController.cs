@@ -2,6 +2,8 @@
 using Finance.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
+
 
 namespace Finance.WebUI.Controllers
 {
@@ -50,15 +52,34 @@ namespace Finance.WebUI.Controllers
         {
             var user = _context.Users.FirstOrDefault(x => x.email == model.email && x.password == model.password);
 
+
             if (user != null)
             {
+                //Session'a bilgileri atıyoruz.
+                HttpContext.Session.SetInt32("id",user.id);
+                HttpContext.Session.SetString("nick_name", user.nick_name);
+                HttpContext.Session.SetString("password",user.password);
+                HttpContext.Session.SetString("email",user.email);
+
+                var result = HttpContext.Session.GetString("id");
+
                 TempData["SuccessMessage"] = "Giriş Başarılı";
+
+                var result2 = User.Identity.Name;
+
+                return RedirectToAction("List", "Amount"); // Aynı view'a yönlendiriyoruz
             }
             else
             {
                 TempData["ErrorMessage"] = "Geçersiz mail adresi veya şifre";
+
+                return RedirectToAction("Login"); // Aynı view'a yönlendiriyoruz
+
             }
-            return RedirectToAction("Login"); // Aynı view'a yönlendiriyoruz
+
+
+
+
         }
 
     }
