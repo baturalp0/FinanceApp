@@ -1,42 +1,144 @@
 ﻿@model List<Amount>
 
+<style>
+    .table-success-custom {
+        background-color: #d1e7dd; /* Yeşil renk */
+    }
+
+    .table-danger-custom {
+        background-color: #f8d7da; /* Kırmızı renk */
+    }
+
+    .btn img {
+        max-width: 24px;
+        max-height: 24px;
+    }
+
+    .number-column {
+        width: 60px;
+    }
+
+    .operations-column { /*sil ve delete butonlarının genişliği*/
+        width: 130px;
+    }
+
+    .amount-column {
+    }
+
+    .name-column {
+    }
+
+</style>
+
+
 
 
 <div class="table-responsive">
-    <table class="table table-bordered table-striped table-hover">
+    <table class="table table-bordered  table-hover">
         <tr>
             <th>#</th>
-            <th>Başlık</th>
+            <th>İşlem</th>
             <th>Miktar</th>
-            <th>Gelir/Gider</th>
-            <th>Edit/Remove</th>
+            <th></th>
         </tr>
 
         @{
             var count = 1;
             @foreach (var item in Model)
             {
-                <tr>
-                    <td>@count</td>
-                    <td>@item.name</td>
-                    <td>@item.amount</td>
-                    <td>@item.type_</td>
-                    <td>
-                        <a class="btn btn-outline-warning" href="/amount/update/@item.id">
-                            Edit
-                        </a>
+                <tr class="@(item.type_ ? "table-success-custom" : "table-danger-custom")">
 
-                        <a class="btn btn-outline-danger" href="/amount/delete/@item.id">
-                            Remove
+                    <td class="number-column">@count</td>
+                    <td class="name-column">@item.name</td>
+                    <td class="amount-column">@item.amount</td>
+                    <td class="operations-column">
+                        <button class="btn btn-success editButton" data-name="@item.name" data-amount="@item.amount" data-id="@item.id">
+                            <img src="/lib/edit.png" alt="Edit">
+                        </button>
+                        <a class="btn" href="/amount/delete/@item.id">
+                            <img src="/lib/delete.png" alt="Remove">
                         </a>
-
                     </td>
                 </tr>
                 count = count + 1;
             }
         }
-
     </table>
-
-
 </div>
+
+
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Düzenle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="name" class="col-form-label">İşlem</label>
+                        <input type="text" class="form-control" id="model1name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="amount" class="col-form-label">Miktar</label>
+                        <input type="text" class="form-control" id="modal1amount">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button>
+                <button type="button" class="btn btn-primary updateModel">Güncelle</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+
+        var amo = '';
+        var na = '';
+
+        $(".editButton").on("click", function () {
+
+            var id = $(".editButton").attr("data-id");
+            var amount = $(this).attr("data-amount");
+            var name = $(this).attr("data-name");
+
+            $('#model1name').val(name);
+            $('#modal1amount').val(amount);
+            $('#exampleModal').modal('show');
+
+
+            amo = amount;
+            na = name;
+        });
+
+
+        $(".updateModel").on("click", function () {
+            $.ajax({
+                type: "POST", 
+                url: "/Amount/Edit", 
+                data: { amount1: amo, name1: na },
+                success: function (response) {
+                    alert("asdad");
+                }
+            });
+
+
+
+        });
+
+
+
+    });
+
+
+</script>

@@ -1,6 +1,8 @@
 ﻿using Finance.Entities.Models;
 using Finance.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.DotNet.Scaffolding.Shared.Project;
 
 namespace Finance.WebUI.Controllers
 {
@@ -20,7 +22,13 @@ namespace Finance.WebUI.Controllers
 
         public IActionResult List()
         {
-            var amounts = _context.Amounts.Where(x => x.user_id == 1).ToList();
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("nick_name")))
+            {
+                return RedirectToAction("Login", "User");
+            }
+
+            var user_id = HttpContext.Session.GetInt32("id");
+            var amounts = _context.Amounts.Where(x => x.user_id == user_id).ToList();
 
             AmountViewModel viewModel = new AmountViewModel();
             viewModel.AmountList = amounts;
@@ -41,6 +49,9 @@ namespace Finance.WebUI.Controllers
         {
             if (ModelState.IsValid)
             {
+                var user_id = HttpContext.Session.GetInt32("id");
+                model.user_id = Convert.ToInt32(user_id);
+                //Amount eklerken gelir mi gider mi kontrolü. Ona göre true ya da false olarak aldık.
                 if (actionType == "Gelir")
                 {
                     model.type_ = true;
@@ -68,6 +79,12 @@ namespace Finance.WebUI.Controllers
             _context.Remove(amount);
             _context.SaveChanges();
             return RedirectToAction("List");
+        }
+
+        [HttpPost]
+        public IActionResult Edit(int amount1, string name1)
+        {
+            return View();
         }
 
 
