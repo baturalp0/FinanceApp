@@ -1,5 +1,6 @@
 ﻿@model List<Amount>
 
+
 <style>
     .table-success-custom {
         background-color: #d1e7dd; /* Yeşil renk */
@@ -52,7 +53,7 @@
                     <td class="name-column">@item.name</td>
                     <td class="amount-column">@item.amount</td>
                     <td class="operations-column">
-                        <button class="btn btn-success editButton" data-name="@item.name" data-amount="@item.amount" data-id="@item.id">
+                        <button class="btn editButton" data-name="@item.name" data-amount="@item.amount" data-id="@item.id">
                             <img src="/lib/edit.png" alt="Edit">
                         </button>
                         <a class="btn" href="/amount/delete/@item.id">
@@ -103,6 +104,7 @@
 
     $(document).ready(function () {
 
+        var idd = '';
         var amo = '';
         var na = '';
 
@@ -119,18 +121,29 @@
 
             amo = amount;
             na = name;
+            idd = id;
         });
 
 
         $(".updateModel").on("click", function () {
+
+            
+
+            var newName = $('#model1name').val();
+            var newAmount = $('#modal1amount').val();
+
+
             $.ajax({
                 type: "POST", 
                 url: "/Amount/Edit", 
-                data: { amount1: amo, name1: na },
+                data: { amount1: newAmount, name1: newName, id1: idd },
                 success: function (response) {
-                    alert("asdad");
+                    alert("Başarıyla güncellendi");
+                    $('#exampleModal').modal('hide');
                 }
             });
+
+
 
 
 

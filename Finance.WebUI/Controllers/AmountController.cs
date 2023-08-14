@@ -82,8 +82,16 @@ namespace Finance.WebUI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(int amount1, string name1)
+        public IActionResult Edit(int amount1, string name1, int id1)
         {
+            var existAmount = _context.Amounts.FirstOrDefault(x => x.id ==id1);
+            if (existAmount != null)
+            {
+                existAmount.amount = amount1;
+                existAmount.name = name1;
+                _context.SaveChanges();
+                return RedirectToAction("List");
+            }
             return View();
         }
 
