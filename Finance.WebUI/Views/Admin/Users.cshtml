@@ -1,0 +1,71 @@
+﻿@model List<User>
+
+@{
+
+    Layout = "/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<style>
+
+    .btn img {
+        max-width: 24px;
+        max-height: 24px;
+    }
+
+    .number-column {
+        width: 60px;
+    }
+
+    .operations-column { /*sil ve delete butonlarının genişliği*/
+        width: 130px;
+    }
+
+    .amount-column {
+    }
+
+    .name-column {
+    }
+
+</style>
+
+
+
+
+<div class="table-responsive">
+    <table class="table table-bordered  table-hover">
+        <tr>
+            @*<th>id</th>*@
+            <th>Takma İsim</th>
+            <th>E-mail</th>
+            <th>Şifre</th>
+        </tr>
+
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                @*<td class="number-column">@item.id</td>*@
+                <td class="name-column">@item.nick_name</td>
+                <td class="amount-column">@item.email</td>
+                <td class="amount-column">@item.password</td>
+                <td class="operations-column">
+                    <button class="btn editButton" @*data-name="@item.name" data-amount="@item.amount" data-id="@item.id"*@>
+                        <img src="/lib/edit.png" alt="Edit">
+                    </button>
+                    <a class="btn" href="/admin/deleteuser/@item.id">
+                        <img src="/lib/delete.png" alt="Remove">
+                    </a>
+                </td>
+            </tr>
+
+        }
+
+    </table>
+</div>
+
+
+
+
+
+

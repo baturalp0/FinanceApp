@@ -1,0 +1,196 @@
+﻿@model List<Amount>
+@{
+
+    Layout = "/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@*<p>
+    <div class="m-5"></div>
+    <partial name="ListPartial" model="Model.AmountList" />
+</p>*@
+
+
+<style>
+    .table-success-custom {
+        background-color: #d1e7dd; /* Yeşil renk */
+    }
+
+    .table-danger-custom {
+        background-color: #f8d7da; /* Kırmızı renk */
+    }
+
+    .btn img {
+        max-width: 24px;
+        max-height: 24px;
+    }
+
+    .number-column {
+        width: 60px;
+    }
+
+    .operations-column { /*sil ve delete butonlarının genişliği*/
+        width: 130px;
+    }
+
+</style>
+
+
+
+
+<div class="table-responsive">
+    <table class="table table-bordered  table-hover">
+        <tr>
+            @*<th>id</th>*@
+            <th>Kullanıcı</th>
+            <th>Miktar</th>
+            <th>İşlem Türü</th>
+            <th>İşlem</th>
+        </tr>
+
+
+        @foreach (var item in Model)
+        {
+            <tr class="@(item.type_ ? "table-success-custom" : "table-danger-custom")">
+                @*<td class="number-column">@item.id</td>*@
+                <td class="name-column">@item.user_id</td>
+                <td>@item.amount</td>
+                <td>
+
+
+                    @if (@item.type_ == true)
+                    {
+                        <span>Gelir</span>
+                    }
+                    else
+                    {
+                        <span>Gider</span>
+                    }
+
+
+                </td>
+                <td>@item.name</td>
+                <td class="operations-column">
+                    <button class="btn editButton" data-id="@item.id" data-user_id="@item.user_id" data-amount="@item.amount" data-type_="@item.type_" data-name="@item.name">
+                        <img src="/lib/edit.png" alt="Edit">
+                    </button>
+                    <a class="btn" href="/admin/delete/@item.id">
+                        <img src="/lib/delete.png" alt="Remove">
+                    </a>
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+
+
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Düzenle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    @*<div class="mb-3">
+                        <label for="id" class="col-form-label">id</label>
+                        <input type="text" readonly class="form-control" id="modal1id">
+                    </div>*@
+                    <div class="mb-3">
+                        <label for="user_id" class="col-form-label">Kullanıcı(Değişecek burası)</label>
+                        <input type="text" readonly class="form-control" id="modal1user_id">
+                    </div>
+                    <div class="mb-3">
+                        <label for="name" class="col-form-label">İşlem</label>
+                        <input type="text" class="form-control" id="modal1name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="amount" class="col-form-label">Miktar</label>
+                        <input type="number" class="form-control" id="modal1amount">
+                    </div>
+                    @*<div class="mb-3">
+                        <label for="type_" class="col-form-label">type_</label>
+                        <input type="text" class="form-control" id="modal1type_">
+                    </div>*@
+                    <div class="mb-3">
+                        <label class="col-form-label">İşlem Türü</label><br>
+                        <input type="radio" id="gelir" name="modal1type_" value="True">
+                        <label for="gelir">Gelir</label><br>
+                        <input type="radio" id="gider" name="modal1type_" value="False">
+                        <label for="gider">Gider</label><br>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button>
+                <button type="button" class="btn btn-primary updateModel">Güncelle</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+
+
+        var tempId = '';
+
+        $(".editButton").on("click", function () {
+
+            var id = $(this).attr("data-id");
+            var amount = $(this).attr("data-amount");
+            var name = $(this).attr("data-name");
+            var type_ = $(this).attr("data-type_");
+            var user_id = $(this).attr("data-user_id");
+
+            $('#modal1user_id').val(user_id);
+            $('#modal1amount').val(amount);
+
+            // İşlem türünü işaretlemek istediğiniz koşula göre kontrol ediyoruz
+            if (type_ === "True") {
+                $('#gelir').prop('checked', true); // "Gelir" radio düğmesini seçili yap
+            } else {
+                $('#gider').prop('checked', true); // "Gider" radio düğmesini seçili yap
+            } 
+            
+            $('#modal1name').val(name);
+            $('#exampleModal').modal('show');
+
+            tempId = id;
+
+        });
+
+        $(".updateModel").on("click", function () {
+
+            var newId = $('#modal1id').val();
+            var newUser_id = $('#modal1user_id').val();
+            var newAmount = $('#modal1amount').val();
+            var newType_ = $('input[name="modal1type_"]:checked').val();
+            var newName = $('#modal1name').val();
+
+
+            $.ajax({
+                type: "POST",
+                url: "/Admin/Edit",
+                data: { amount: newAmount, name: newName, type: newType_, currentId: tempId },
+                success: function (response) {
+                    alert("Başarıyla güncellendi");
+                    $('#exampleModal').modal('hide');
+                }
+            });
+
+        });
+
+    });
+
+
+</script>
+

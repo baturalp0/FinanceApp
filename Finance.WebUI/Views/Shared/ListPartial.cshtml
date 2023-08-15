@@ -53,7 +53,7 @@
                     <td class="name-column">@item.name</td>
                     <td class="amount-column">@item.amount</td>
                     <td class="operations-column">
-                        <button class="btn editButton" data-name="@item.name" data-amount="@item.amount" data-id="@item.id">
+                        <button class="btn editButton" data-name="@item.name" data-amount="@item.amount" data-id="@item.id" data-type="@item.type_">
                             <img src="/lib/edit.png" alt="Edit">
                         </button>
                         <a class="btn" href="/amount/delete/@item.id">
@@ -70,7 +70,7 @@
 
 
 
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -107,12 +107,14 @@
         var idd = '';
         var amo = '';
         var na = '';
+        var tp = '';
 
         $(".editButton").on("click", function () {
 
             var id = $(".editButton").attr("data-id");
             var amount = $(this).attr("data-amount");
             var name = $(this).attr("data-name");
+            var type_ = $(this).attr("data-type");
 
             $('#model1name').val(name);
             $('#modal1amount').val(amount);
@@ -122,23 +124,24 @@
             amo = amount;
             na = name;
             idd = id;
+            tp = type_;
         });
 
 
         $(".updateModel").on("click", function () {
 
-            
+
 
             var newName = $('#model1name').val();
             var newAmount = $('#modal1amount').val();
 
 
             $.ajax({
-                type: "POST", 
-                url: "/Amount/Edit", 
-                data: { amount1: newAmount, name1: newName, id1: idd },
+                type: "POST",
+                url: "/Amount/Edit",
+                data: { amount1: newAmount, name1: newName, id1: idd, type: tp },
                 success: function (response) {
-                    alert("Başarıyla güncellendi");
+                    alert("Başarıyla güncellendi"+ tp);
                     $('#exampleModal').modal('hide');
                 }
             });
