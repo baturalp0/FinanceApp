@@ -19,12 +19,14 @@ namespace Finance.Services
         {
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new AmountConfiguration());
+            modelBuilder.ApplyConfiguration(new LogConfiguration());
 
             base.OnModelCreating(modelBuilder);
         }
 
         public DbSet<User> Users { get; set; } 
         public DbSet<Amount> Amounts { get; set; } 
+        public DbSet<Log> Log { get; set; } 
 
 
     }

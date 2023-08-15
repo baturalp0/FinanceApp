@@ -141,7 +141,10 @@
                 url: "/Amount/Edit",
                 data: { amount1: newAmount, name1: newName, id1: idd, type: tp },
                 success: function (response) {
-                    alert("Başarıyla güncellendi"+ tp);
+
+                    toastr.success('İçerik Güncellendi', 'Başarılı');
+
+
                     $('#exampleModal').modal('hide');
                 }
             });

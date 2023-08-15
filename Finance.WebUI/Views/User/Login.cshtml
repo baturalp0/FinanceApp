@@ -7,16 +7,7 @@
 <div class="d-flex justify-content-center align-items-center" style="min-height: 60vh;">
     <div class="col-md-4">
 
-        @if (TempData["SuccessMessage"] != null)
-        {
-            <div class="alert alert-success custom-alert">@TempData["SuccessMessage"]</div>
-        }
-        @if (TempData["ErrorMessage"] != null)
-        {
-            <div class="alert alert-danger custom-alert">@TempData["ErrorMessage"]</div>
-        }
 
-        
         <form asp-controller="User" asp-action="Login" method="post">
             <div class="mb-3">
                 <label for="email" class="form-label">E-mail Adresi</label>
@@ -42,12 +33,12 @@
             <div class="m-4"></div>
 
             <div style="text-align: center;">
-            <p>Bir hesabınız yok mu? <a asp-controller="User" asp-action="GoToLogin" >Hemen oluşturun!</a> </p>
+                <p>Bir hesabınız yok mu? <a asp-controller="User" asp-action="GoToLogin">Hemen oluşturun!</a> </p>
             </div>
 
         </form>
 
-        
+
 
     </div>
 </div>

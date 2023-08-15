@@ -1,5 +1,6 @@
 ﻿using Finance.Entities.Models;
 using Finance.Services;
+using Finance.WebUI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Xml.Linq;
@@ -24,6 +25,15 @@ namespace Finance.WebUI.Controllers
 
         public IActionResult List()
         {
+
+            var user = HttpContext.Session.GetInt32("role_id");
+
+            if(user != 1)
+            {
+                return RedirectToAction("List","Amount");
+            }
+
+
             //if (string.IsNullOrEmpty(HttpContext.Session.GetString("nick_name")))
             //{
             //    return RedirectToAction("Login", "User");
@@ -34,12 +44,29 @@ namespace Finance.WebUI.Controllers
 
             var amounts = _context.Amounts.OrderBy(x => x.id).ToList(); //id'ye göre sıraladık
 
+
+            var amounts2 = (from a in _context.Amounts
+                            join u in _context.Users on a.user_id equals u.id
+                            select new AdminListViewModel
+                            {
+                                user_id = u.id,
+                                id = a.id,
+                                amount = a.amount,
+                                name = a.name,
+                                password = u.password,
+                                type_ = a.type_,
+                                nick_name = u.nick_name
+                            }).OrderBy(x => x.id).ToList();
+
+
+
+
             //AmountViewModel viewModel = new AmountViewModel();
             //viewModel.AmountList = amounts;
             //viewModel.Amount = null;
 
 
-            return View(amounts);
+            return View(amounts2);
         }
 
         public IActionResult Users()
@@ -57,6 +84,9 @@ namespace Finance.WebUI.Controllers
         public IActionResult Edit(int amount, string name, bool type, int currentId)
         {
             var existAmount = _context.Amounts.FirstOrDefault(x => x.id == currentId);
+
+
+
             if (existAmount != null)
             {
                 existAmount.amount = amount;

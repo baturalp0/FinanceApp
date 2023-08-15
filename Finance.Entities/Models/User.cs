@@ -23,5 +23,6 @@ namespace Finance.Entities.Models
         [MinLength(8, ErrorMessage = "Minimum 8 karakter girilmelidir.")]
         [MaxLength(20, ErrorMessage = "Maximum 20 karakter girilmelidir.")]
         public string password { get; set; }
+        public int role_id { get; set; }
     }
 }

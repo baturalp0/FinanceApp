@@ -1,4 +1,4 @@
-﻿@model List<Amount>
+﻿@model List<AdminListViewModel>
 @{
 
     Layout = "/Views/Shared/_LayoutAdmin.cshtml";
@@ -52,7 +52,7 @@
         {
             <tr class="@(item.type_ ? "table-success-custom" : "table-danger-custom")">
                 @*<td class="number-column">@item.id</td>*@
-                <td class="name-column">@item.user_id</td>
+                <td class="name-column">@item.nick_name</td>
                 <td>@item.amount</td>
                 <td>
 
@@ -70,7 +70,7 @@
                 </td>
                 <td>@item.name</td>
                 <td class="operations-column">
-                    <button class="btn editButton" data-id="@item.id" data-user_id="@item.user_id" data-amount="@item.amount" data-type_="@item.type_" data-name="@item.name">
+                    <button class="btn editButton" data-id="@item.id" data-user_id="@item.user_id" data-nick_name="@item.nick_name" data-amount="@item.amount" data-type_="@item.type_" data-name="@item.name">
                         <img src="/lib/edit.png" alt="Edit">
                     </button>
                     <a class="btn" href="/admin/delete/@item.id">
@@ -101,7 +101,7 @@
                     </div>*@
                     <div class="mb-3">
                         <label for="user_id" class="col-form-label">Kullanıcı(Değişecek burası)</label>
-                        <input type="text" readonly class="form-control" id="modal1user_id">
+                        <input type="text" readonly class="form-control" id="modal1nick_name">
                     </div>
                     <div class="mb-3">
                         <label for="name" class="col-form-label">İşlem</label>
@@ -150,6 +150,7 @@
             var name = $(this).attr("data-name");
             var type_ = $(this).attr("data-type_");
             var user_id = $(this).attr("data-user_id");
+            var nick_name = $(this).attr("data-nick_name");
 
             $('#modal1user_id').val(user_id);
             $('#modal1amount').val(amount);
@@ -159,8 +160,10 @@
                 $('#gelir').prop('checked', true); // "Gelir" radio düğmesini seçili yap
             } else {
                 $('#gider').prop('checked', true); // "Gider" radio düğmesini seçili yap
-            } 
-            
+            }
+
+            $('#modal1nick_name').val(nick_name);
+
             $('#modal1name').val(name);
             $('#exampleModal').modal('show');
 
@@ -171,16 +174,17 @@
         $(".updateModel").on("click", function () {
 
             var newId = $('#modal1id').val();
-            var newUser_id = $('#modal1user_id').val();
+            //var newUser_id = $('#modal1user_id').val();
             var newAmount = $('#modal1amount').val();
             var newType_ = $('input[name="modal1type_"]:checked').val();
             var newName = $('#modal1name').val();
+            var newNick_name = $('#modal1nick_name').val();
 
 
             $.ajax({
                 type: "POST",
                 url: "/Admin/Edit",
-                data: { amount: newAmount, name: newName, type: newType_, currentId: tempId },
+                data: { amount: newAmount, name: newName, type: newType_, currentId: tempId},
                 success: function (response) {
                     alert("Başarıyla güncellendi");
                     $('#exampleModal').modal('hide');

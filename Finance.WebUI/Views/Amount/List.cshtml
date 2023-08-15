@@ -1,6 +1,19 @@
 ﻿@model AmountViewModel
 
 
+
+@section Scripts{
+    @if (TempData["SuccessSave"] != null)
+    {
+        <script>
+
+            toastr.success('Have fun storming the castle!', 'Miracle Max Says');
+
+        </script>
+
+    }
+}
+
 <div class="m-5"></div>
 <partial name="AddPartial" model="Model.Amount" />
 

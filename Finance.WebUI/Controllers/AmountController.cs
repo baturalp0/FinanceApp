@@ -94,6 +94,9 @@ namespace Finance.WebUI.Controllers
                 existAmount.name = name1;
                 existAmount.type_ = type;
                 _context.SaveChanges();
+
+                TempData["SuccessSave"] = "Kayıt Başarılı";
+
                 return RedirectToAction("List");
             }
             return View();
