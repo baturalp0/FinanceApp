@@ -39,6 +39,7 @@
             <th>Takma İsim</th>
             <th>E-mail</th>
             <th>Şifre</th>
+            <th>Rol</th>
         </tr>
 
 
@@ -49,8 +50,22 @@
                 <td class="name-column">@item.nick_name</td>
                 <td class="amount-column">@item.email</td>
                 <td class="amount-column">@item.password</td>
+                <td>
+
+
+                    @if (@item.role_id == 1)
+                    {
+                        <span>Admin</span>
+                    }
+                    else
+                    {
+                        <span>Kullanıcı</span>
+                    }
+
+
+                </td>
                 <td class="operations-column">
-                    <button class="btn editButton" @*data-name="@item.name" data-amount="@item.amount" data-id="@item.id"*@>
+                    <button class="btn editButton" data-nick_name="@item.nick_name" data-email="@item.email" data-password="@item.password" data-id="@item.id" data-role_id="@item.role_id">
                         <img src="/lib/edit.png" alt="Edit">
                     </button>
                     <a class="btn" href="/admin/deleteuser/@item.id">
@@ -63,6 +78,107 @@
 
     </table>
 </div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Düzenle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    @*<div class="mb-3">
+                    <label for="id" class="col-form-label">id</label>
+                    <input type="text" readonly class="form-control" id="modal1id">
+                    </div>*@
+                    <div class="mb-3">
+                        <label for="nick_name" class="col-form-label">Takma İsim</label>
+                        <input type="text" class="form-control" id="modal1nick_name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="col-form-label">E-mail</label>
+                        <input type="text" class="form-control" id="modal1email">
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="col-form-label">Şifre</label>
+                        <input type="text" class="form-control" id="modal1password">
+                    </div>
+                    <div class="mb-3">
+                        <label for="role_id" class="col-form-label">Rol</label>
+                        <input readonly type="text" class="form-control" id="modal1role_id">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button>
+                <button type="button" class="btn btn-primary updateModel">Güncelle</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+
+
+        var tempId = '';
+        var tempRole_id = '';
+
+        $(".editButton").on("click", function () {
+
+            var id = $(this).data("id");
+            var nick_name = $(this).data("nick_name");
+            var email = $(this).data("email");
+            var password = $(this).data("password");
+            var role_id = $(this).data("role_id");
+
+            $('#modal1nick_name').val(nick_name);
+            $('#modal1email').val(email);
+            $('#modal1password').val(password);
+
+            if (role_id === 1) {
+                $('#modal1role_id').val("Admin");
+            } else {
+                $('#modal1role_id').val("Kullanıcı");
+            }
+
+            $('#exampleModal').modal('show');
+
+            tempId = id;
+            tempRole_id = role_id;
+
+        });
+
+
+        $(".updateModel").on("click", function () {
+
+            var newNick_name = $('#modal1nick_name').val();
+            var newEmail = $('#modal1email').val();
+            var newPassword = $('#modal1password').val();
+
+
+            $.ajax({
+                type: "POST",
+                url: "/Admin/EditUser",
+                data: { nick_name: newNick_name, email: newEmail, password: newPassword, currentId: tempId, currentRoleId: tempRole_id },
+                success: function (response) {
+                    alert("Başarıyla güncellendi");
+                    $('#exampleModal').modal('hide');
+                },
+                error: function (xhr, status, error) {
+                    alert("Güncelleme sırasında bir hata oluştu");
+                }
+            });
+
+        });
+
+    });
+
+
+</script>
 
 
 

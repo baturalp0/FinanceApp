@@ -1,0 +1,33 @@
+﻿@model List<Log>
+
+@{
+        Layout = "/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="table-responsive">
+    <table class="table table-bordered  table-hover">
+        <tr>
+            @*<th>id</th>*@
+            <th>log id</th>
+            <th>user_id</th>
+            <th>message</th>
+            <th>action_name</th>
+            <th>controller_name</th>
+        </tr>
+
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                @*<td class="number-column">@item.id</td>*@
+                <td class="name-column">@item.id</td>
+                <td class="amount-column">@item.user_id</td>
+                <td class="amount-column">@item.message</td>
+                <td class="amount-column">@item.action_name</td>
+                <td class="amount-column">@item.controller_name</td>
+            </tr>
+
+        }
+
+    </table>
+</div>

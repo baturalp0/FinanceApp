@@ -7,6 +7,15 @@
 <div class="d-flex justify-content-center align-items-center" style="min-height: 60vh;">
     <div class="col-md-4">
 
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success custom-alert">@TempData["SuccessMessage"]</div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger custom-alert">@TempData["ErrorMessage"]</div>
+        }
+
 
         <form asp-controller="User" asp-action="Login" method="post">
             <div class="mb-3">

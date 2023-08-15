@@ -8,6 +8,8 @@ namespace Finance.WebUI.Controllers
 {
     public class AmountController : Controller
     {
+        Log log;
+
         private readonly DatabaseContext _context;
         //readOnly bu değişkene sadece burada değer atanabileceğini gösterir. Sanırım bu _context Dependency Injectionla alakalı.
         public IActionResult Index()
@@ -62,6 +64,12 @@ namespace Finance.WebUI.Controllers
                 }
                 _context.Amounts.Add(model);
                 _context.SaveChanges();
+
+
+                log = new Log() { action_name = "Add", controller_name = "Amount", message = "Başarılı İşlem Ekleme", user_id = model.user_id };
+                _context.Logs.Add(log);
+                _context.SaveChanges();
+
                 return RedirectToAction("List");
             }
             return View(model);
@@ -78,6 +86,12 @@ namespace Finance.WebUI.Controllers
             var amount = _context.Amounts.FirstOrDefault(x => x.id == id); //select * from category where id = '"+id+"'
             _context.Remove(amount);
             _context.SaveChanges();
+
+            var user_id = Convert.ToInt32(HttpContext.Session.GetInt32("id"));
+            log = new Log() { action_name = "Delete", controller_name = "Amount", message = "Başarılı Kayıt Silme", user_id = user_id };
+            _context.Logs.Add(log);
+            _context.SaveChanges();
+
             return RedirectToAction("List");
         }
 
@@ -96,6 +110,11 @@ namespace Finance.WebUI.Controllers
                 _context.SaveChanges();
 
                 TempData["SuccessSave"] = "Kayıt Başarılı";
+
+                var user_id = Convert.ToInt32(HttpContext.Session.GetInt32("id"));
+                log = new Log() { action_name = "Edit", controller_name = "Amount", message = "Başarılı Kayıt Güncelleme", user_id = user_id };
+                _context.Logs.Add(log);
+                _context.SaveChanges();
 
                 return RedirectToAction("List");
             }

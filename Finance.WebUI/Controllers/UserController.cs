@@ -38,7 +38,13 @@ namespace Finance.WebUI.Controllers
                 _context.Users.Add(model);
                 model.role_id = 2;
                 _context.SaveChanges();
-                return RedirectToAction("List");
+
+                log = new Log() { action_name = "Create", controller_name = "User", message = "Başarılı Kullanıcı Kayıt", user_id = model.id };
+                _context.Logs.Add(log);
+                _context.SaveChanges();
+
+                return RedirectToAction("List", "Amount");
+
             }
             return View(model);
         }
@@ -66,7 +72,7 @@ namespace Finance.WebUI.Controllers
                 HttpContext.Session.SetInt32("role_id", user.role_id);
 
                 log = new Log() { action_name = "Login", controller_name = "User", message = "Başarılı Giriş", user_id = user.id };
-                _context.Log.Add(log);
+                _context.Logs.Add(log);
                 _context.SaveChanges();
 
                 if (user.role_id == 1)
@@ -84,7 +90,7 @@ namespace Finance.WebUI.Controllers
             {
                 TempData["ErrorMessage"] = "Geçersiz mail adresi veya şifre";
                 log = new Log() { action_name = "Login", controller_name = "User", message = "Başarısız Giriş", user_id = 0 };
-                _context.Log.Add(log);
+                _context.Logs.Add(log);
                 _context.SaveChanges();
                 return RedirectToAction("Login"); // Aynı view'a yönlendiriyoruz
             }
@@ -92,10 +98,19 @@ namespace Finance.WebUI.Controllers
 
         public IActionResult Logout()
         {
+            var user_id = Convert.ToInt32(HttpContext.Session.GetInt32("id"));
+
+            log = new Log() { action_name = "Logout", controller_name = "User", message = "Başarılı Çıkış", user_id = user_id };
+            _context.Logs.Add(log);
+            _context.SaveChanges();
+
+
             HttpContext.Session.Remove("id");
             HttpContext.Session.Remove("nick_name");
             HttpContext.Session.Remove("password");
             HttpContext.Session.Remove("email");
+
+
 
             //HttpContext.Session.Abandon();
             //FormsAuthentication.SignOut();

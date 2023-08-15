@@ -26,7 +26,7 @@ namespace Finance.Services
 
         public DbSet<User> Users { get; set; } 
         public DbSet<Amount> Amounts { get; set; } 
-        public DbSet<Log> Log { get; set; } 
+        public DbSet<Log> Logs { get; set; } 
 
 
     }

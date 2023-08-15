@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var id = Context.Session.GetInt32("id");
+    var nick_name = Context.Session.GetString("nick_name");
+}
+
+
+<!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="utf-8" />
@@ -21,7 +27,7 @@
             <div class="list-group list-group-flush">
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/Admin/List">İşlemler</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/Admin/Users">Kullanıcılar</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Log</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/Admin/Logs">Log</a>
             </div>
         </div>
         <!-- Page content wrapper-->
@@ -42,11 +48,11 @@
                             @*<li class="nav-item active"><a class="nav-link" href="#!">Home</a></li>
                             <li class="nav-item"><a class="nav-link" href="#!">Link</a></li>*@
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin İsmi</a>
+                                <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@nick_name</a>
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="#!">Profilim</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#!">Çıkış Yap</a>
+                                    <a class="dropdown-item"  asp-controller="User" asp-action="Logout">Çıkış Yap</a>
                                 </div>
                             </li>
                         </ul>
