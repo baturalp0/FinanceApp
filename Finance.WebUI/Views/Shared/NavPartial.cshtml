@@ -12,11 +12,13 @@
         <div class="container-fluid d-flex align-items-center">
             <span style="color: white; font-size: 18px; font-style: italic;">Hoşgeldin @nick_name</span>
             <div class="mx-auto">
-                <a class="navbar-brand" href="#a">
+                <a class="navbar-brand" href="/Amount/List">
                     <img src="/lib/budget.png" alt="Bootstrap" width="50" height="44">
                 </a>
-                <a class="navbar-brand" style="font-size: 25px ;font-weight: bold">Finance</a>
+                <a class="navbar-brand" href="/Amount/List" style="font-size: 25px ;font-weight: bold">Finance</a>
             </div>
+            <a class="btn btn-outline-light" asp-controller="User" asp-action="Profile">Profilim</a>
+            <div class="mx-4">
             <a class="btn btn-outline-light" asp-controller="User" asp-action="Logout">Çıkış Yap</a>
         </div>
     </nav>

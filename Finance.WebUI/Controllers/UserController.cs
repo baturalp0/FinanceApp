@@ -129,6 +129,38 @@ namespace Finance.WebUI.Controllers
             return RedirectToAction("Login");
         }
 
+        public IActionResult Profile()
+        {
+            return View();
+        }
+
+        //Burası profil sayfasını güncellediğimiz yer. Burada yapılan değişiklikler session için de yapılmalı.
+        [HttpPost]
+        public IActionResult EditUser(string nick_name, string email, string password, int currentId, int currentRoleId)
+        {
+            var existUser = _context.Users.FirstOrDefault(x => x.id == currentId);
+
+            if (existUser != null)
+            {
+                existUser.nick_name = nick_name;
+                existUser.email = email;
+                existUser.password = password;
+                _context.SaveChanges();
+
+                HttpContext.Session.SetString("nick_name", nick_name);
+                HttpContext.Session.SetString("password", password);
+                HttpContext.Session.SetString("email", email);
+
+                var user_id = Convert.ToInt32(HttpContext.Session.GetInt32("id"));
+                log = new Log() { action_name = "EditUser", controller_name = "User", message = "Başarılı Kullanıcı Güncelleme", user_id = user_id };
+                _context.Logs.Add(log);
+                _context.SaveChanges();
+
+                return RedirectToAction("Profile");
+            }
+            return View();
+        }
+
     }
 
 }
