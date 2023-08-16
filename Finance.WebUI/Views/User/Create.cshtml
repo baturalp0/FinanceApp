@@ -2,7 +2,13 @@
 
 @section Scripts{
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        toastr.error('@TempData["InfoMessage"]');
+    </script>
+
 }
+
 
 <div class="d-flex justify-content-center align-items-center" style="min-height: 60vh;">
     <div class="col-md-4">

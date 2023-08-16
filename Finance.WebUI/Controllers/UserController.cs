@@ -35,15 +35,25 @@ namespace Finance.WebUI.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Users.Add(model);
-                model.role_id = 2;
-                _context.SaveChanges();
+                var exist = _context.Users.Where(x => x.email == model.email).FirstOrDefault();
+                var exist1 = _context.Users.Any(x => x.email == model.email); //true ya da false döner.
+                if (exist1 == true)
+                {
+                    TempData["InfoMessage"] = $"{model.email} daha önce alınmış.";
+                    // return View(model); //model dönersek iinputlarda model durmaya devam eder. View() dönerse inputların içi silinir.
+                }
+                else
+                {
+                    _context.Users.Add(model);
+                    model.role_id = 2;
+                    log = new Log() { action_name = "Create", controller_name = "User", message = "Başarılı Kullanıcı Kayıt", user_id = model.id };
+                    _context.Logs.Add(log);
+                    _context.SaveChanges();
 
-                log = new Log() { action_name = "Create", controller_name = "User", message = "Başarılı Kullanıcı Kayıt", user_id = model.id };
-                _context.Logs.Add(log);
-                _context.SaveChanges();
+                    return RedirectToAction("List", "Amount");
 
-                return RedirectToAction("List", "Amount");
+                }
+
 
             }
             return View(model);
@@ -139,26 +149,39 @@ namespace Finance.WebUI.Controllers
         public IActionResult EditUser(string nick_name, string email, string password, int currentId, int currentRoleId)
         {
             var existUser = _context.Users.FirstOrDefault(x => x.id == currentId);
+            var existEmail = _context.Users.FirstOrDefault(x => x.email == email);
 
             if (existUser != null)
             {
-                existUser.nick_name = nick_name;
-                existUser.email = email;
-                existUser.password = password;
-                _context.SaveChanges();
 
-                HttpContext.Session.SetString("nick_name", nick_name);
-                HttpContext.Session.SetString("password", password);
-                HttpContext.Session.SetString("email", email);
+                if (existEmail != null)
+                {
+                    TempData["InfoMessage"] = "Success";
+                    return Json("2");
+                }
+                else
+                {
+                    existUser.nick_name = nick_name;
+                    existUser.email = email;
+                    existUser.password = password;
+                    _context.SaveChanges();
 
-                var user_id = Convert.ToInt32(HttpContext.Session.GetInt32("id"));
-                log = new Log() { action_name = "EditUser", controller_name = "User", message = "Başarılı Kullanıcı Güncelleme", user_id = user_id };
-                _context.Logs.Add(log);
-                _context.SaveChanges();
+                    HttpContext.Session.SetString("nick_name", nick_name);
+                    HttpContext.Session.SetString("password", password);
+                    HttpContext.Session.SetString("email", email);
 
-                return RedirectToAction("Profile");
+                    var user_id = Convert.ToInt32(HttpContext.Session.GetInt32("id"));
+                    log = new Log() { action_name = "EditUser", controller_name = "User", message = "Başarılı Kullanıcı Güncelleme", user_id = user_id };
+                    _context.Logs.Add(log);
+                    _context.SaveChanges();
+
+                    return Json("1");
+
+                }
+
             }
-            return View();
+            return Json("3");
+
         }
 
     }

@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="~/Finance.WebUI.styles.css" asp-append-version="true" />
     <link href="~/toastr/cdnjs.cloudflare.com_ajax_libs_toastr.js_latest_toastr.min.css" rel="stylesheet" />
     <link href="~/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/lib/toastr.js/toastr.min.css" rel="stylesheet" />
 </head>
 <body>
     <header>
@@ -31,7 +32,8 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/sweetalert.js"></script>
     <script src="~/toastr/cdnjs.cloudflare.com_ajax_libs_toastr.js_latest_toastr.min.js"></script>
-
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/lib/toastr.js/toastr.min.js"></script>
     <script>
 
         toastr.options = {
@@ -54,6 +56,6 @@
 
     </script>
 
-    @RenderSection("Scripts", required: false)
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
