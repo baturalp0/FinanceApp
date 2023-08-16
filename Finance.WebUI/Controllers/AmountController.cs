@@ -1,8 +1,6 @@
 ﻿using Finance.Entities.Models;
 using Finance.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
-using Microsoft.DotNet.Scaffolding.Shared.Project;
 
 namespace Finance.WebUI.Controllers
 {
@@ -24,6 +22,7 @@ namespace Finance.WebUI.Controllers
 
         public IActionResult List()
         {
+            var user = HttpContext.Session.GetString("nick_name");
             if (string.IsNullOrEmpty(HttpContext.Session.GetString("nick_name")))
             {
                 return RedirectToAction("Login", "User");
@@ -95,13 +94,13 @@ namespace Finance.WebUI.Controllers
             return RedirectToAction("List");
         }
 
-        
+
 
 
         [HttpPost]
         public IActionResult Edit(int amount1, string name1, int id1, bool type)
         {
-            var existAmount = _context.Amounts.FirstOrDefault(x => x.id ==id1);
+            var existAmount = _context.Amounts.FirstOrDefault(x => x.id == id1);
             if (existAmount != null)
             {
                 existAmount.amount = amount1;

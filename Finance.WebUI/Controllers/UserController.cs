@@ -1,8 +1,8 @@
 ﻿using Finance.Entities.Models;
 using Finance.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 
 namespace Finance.WebUI.Controllers
@@ -80,6 +80,7 @@ namespace Finance.WebUI.Controllers
                 HttpContext.Session.SetString("password", user.password);
                 HttpContext.Session.SetString("email", user.email);
                 HttpContext.Session.SetInt32("role_id", user.role_id);
+                HttpContext.Session.SetString("PictureFilePath", user.ProfilePicturePath);
 
                 log = new Log() { action_name = "Login", controller_name = "User", message = "Başarılı Giriş", user_id = user.id };
                 _context.Logs.Add(log);
@@ -148,6 +149,7 @@ namespace Finance.WebUI.Controllers
         [HttpPost]
         public IActionResult EditUser(string nick_name, string email, string password, int currentId, int currentRoleId)
         {
+
             var existUser = _context.Users.FirstOrDefault(x => x.id == currentId);
             var existEmail = _context.Users.FirstOrDefault(x => x.email == email);
 
@@ -181,8 +183,41 @@ namespace Finance.WebUI.Controllers
 
             }
             return Json("3");
-
         }
+
+
+        [HttpPost]
+        public IActionResult UploadProfilePicture(IFormFile file)
+        {
+            if (file != null && file.Length > 0)
+            {
+                var fileName = Path.GetFileName(file.FileName); // Dosya adını alın
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    file.CopyTo(stream);
+                }
+
+                // Resim dosya yolunu veritabanına kaydetme
+                var userId = HttpContext.Session.GetInt32("id"); // Kullanıcının kimliği
+                var user = _context.Users.FirstOrDefault(x => x.id == userId);
+
+                if (user != null)
+                {
+                    user.ProfilePicturePath = "/uploads/" + fileName; // Veritabanında sadece resim dosya adını kaydet
+                    HttpContext.Session.SetString("PictureFilePath", user.ProfilePicturePath);
+                    _context.SaveChanges();
+                }
+
+                return Json(new { success = true, message = "Resim başarıyla yüklendi" });
+            }
+
+            return Json(new { success = false, message = "Resim yüklenirken bir hata oluştu" });
+        }
+
+
+
 
     }
 

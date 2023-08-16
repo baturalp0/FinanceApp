@@ -5,80 +5,81 @@
     var nick_name = Context.Session.GetString("nick_name");
     var email = Context.Session.GetString("email");
     var password = Context.Session.GetString("password");
+    var ProfilePictureFilePath = Context.Session.GetString("PictureFilePath");
 }
 
-@*<style>
+<style>
 
-    body {
-        margin - top: 20px;
-        background - color: #f2f6fc;
+    /*body {
+        margin-top: 20px;
+        background-color: #f2f6fc;
         color: #69707a;
-    }
+    }*/
 
-    .img - account - profile {
+    .img-account-profile {
         height: 10rem;
     }
 
-    .rounded - circle {
-        border - radius: 50 % !important;
+    .rounded-circle {
+        border-radius: 50% !important;
     }
 
     .card {
-        box - shadow: 0 0.15rem 1.75rem 0 rgb(33 40 50 / 15 %);
+        box-shadow: 0 0.15rem 1.75rem 0 rgb(33 40 50 / 15 %);
     }
 
-        .card.card - header {
-            font - weight: 500;
+        .card.card-header {
+            font-weight: 500;
         }
 
-        .card - header: first - child {
-            border - radius: 0.35rem 0.35rem 0 0;
+        .card-header: first-child {
+            border-radius: 0.35rem 0.35rem 0 0;
         }
 
-        .card - header {
+        .card-header {
             padding: 1rem 1.35rem;
-            margin - bottom: 0;
-            background - color: rgba(33, 40, 50, 0.03);
-            border - bottom: 1px solid rgba(33, 40, 50, 0.125);
+            margin-bottom: 0;
+            background-color: rgba(33, 40, 50, 0.03);
+            border-bottom: 1px solid rgba(33, 40, 50, 0.125);
         }
 
     .form-control, .dataTable-input {
         display: block;
-        width: 100 %;
+        width: 100%;
         padding: 0.875rem 1.125rem;
         font-size: 0.875rem;
         font-weight: 400;
         line-height: 1;
         color: #69707a;
         background-color: #fff;
-        background-clip: padding - box;
+        background-clip: padding-box;
         border: 1px solid #c5ccd6;
-        -webkit- appearance: none;
-        -moz- appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
         appearance: none;
         border-radius: 0.35rem;
-        transition: border - color 0.15s ease -in -out, box - shadow 0.15s ease -in -out;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
     }
 
     .nav-borders.nav-link.active {
         color: #0061f2;
-        border - bottom - color: #0061f2;
+        border-bottom-color: #0061f2;
     }
 
     .nav-borders.nav-link {
         color: #69707a;
-        border - bottom - width: 0.125rem;
-        border - bottom - style: solid;
-        border - bottom - color: transparent;
-        padding - top: 0.5rem;
-        padding - bottom: 0.5rem;
-        padding - left: 0;
-        padding - right: 0;
-        margin - left: 1rem;
-        margin - right: 1rem;
+        border-bottom-width: 0.125rem;
+        border-bottom-style: solid;
+        border-bottom-color: transparent;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        padding-left: 0;
+        padding-right: 0;
+        margin-left: 1rem;
+        margin-right: 1rem;
     }
 
-</style>*@
+</style>
 
 
 
@@ -90,14 +91,16 @@
                 <div class="card-header">Profil Resmi</div>
                 <div class="card-body text-center">
                     <!-- Profile picture image-->
-                    <img class="img-account-profile rounded-circle mb-2" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">
+                    <img class="img-account-profile rounded-circle mb-2" src="@ProfilePictureFilePath" alt="">
                     <!-- Profile picture help block-->
                     <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
                     <!-- Profile picture upload button-->
-                    <button class="btn btn-primary" type="button">Yeni Resim Ekle</button>
+                    <button class="btn btn-primary" type="button" id="uploadButton">Yeni Resim Ekle</button>
                 </div>
             </div>
         </div>
+
+
         <div class="col-xl-8">
             <!-- Account details card-->
             @if (TempData["InfoMessage"] != null)
@@ -129,6 +132,7 @@
                                 <input class="form-control" id="modal1password" type="password" placeholder="Şifrenizi Giriniz" value="@password">
                             </div>
                         </div>
+                        
                         <!-- Save changes button-->
                         <button class="btn btn-primary saveButton" type="button">Kaydet</button>
                     </form>
@@ -139,6 +143,61 @@
 </div>
 
 
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#uploadButton").on("click", function () {
+            var input = document.createElement('input');
+            input.type = 'file';
+            input.click();
+
+            input.onchange = function () {
+                var file = input.files[0];
+                if (file) {
+                    var formData = new FormData();
+                    formData.append("file", file);
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/User/UploadProfilePicture",
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (response) {
+                            // Resim başarıyla yüklendiğinde yapılacak işlemler
+                            // Örneğin, yeni resmi profil görüntüsü olarak göstermek veya sayfayı yenilemek
+                        },
+                        error: function (xhr, status, error) {
+                            // Hata durumunda yapılacak işlemler
+                        }
+                    });
+                }
+            };
+        });
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
 <script>
@@ -146,7 +205,7 @@
     $(document).ready(function () {
 
         $(".saveButton").on("click", function () {
-            
+
             var newNick_name = $('#modal1nick_name').val();
             var newEmail = $('#modal1email').val();
             var newPassword = $('#modal1password').val();

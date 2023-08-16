@@ -1,19 +1,52 @@
+using Finance.Entities.Models;
 using Finance.Services;
+using Finance.Services.Validators;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddTransient<IValidator<User>, UserValidator>();
+builder.Services.AddControllersWithViews()
+   .AddSessionStateTempDataProvider();
 
-builder.Services.AddControllersWithViews();
+
+builder.Services.AddFluentValidation(conf =>
+{
+    conf.RegisterValidatorsFromAssembly(typeof(Program).Assembly);
+    conf.AutomaticValidationEnabled = false;
+});
+
 
 builder.Services.AddDistributedMemoryCache();
 
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.Cookie.SameSite = SameSiteMode.Lax; // veya SameSiteMode.Strict
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+        options.Cookie.IsEssential = true;
+        options.ExpireTimeSpan = TimeSpan.FromDays(7);
+    });
+
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(60);
-    options.Cookie.HttpOnly = true;
+    options.Cookie.SameSite = SameSiteMode.Lax; // veya SameSiteMode.Strict
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
     options.Cookie.IsEssential = true;
-    options.Cookie.Name = "Finance.Service";
+    options.IdleTimeout = TimeSpan.FromDays(7);
 });
+
+
+
+//builder.Services.AddSession(options =>
+//{
+//    options.IdleTimeout = TimeSpan.FromMinutes(60);
+//    options.Cookie.HttpOnly = true;
+//    options.Cookie.IsEssential = true;
+//    options.Cookie.Name = "Finance.Service";
+//});
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -35,6 +68,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 app.UseSession();
