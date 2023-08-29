@@ -8,6 +8,10 @@
     var ProfilePictureFilePath = Context.Session.GetString("PictureFilePath");
 }
 
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}
+
 <style>
 
     /*body {
@@ -93,7 +97,7 @@
                     <!-- Profile picture image-->
                     <img class="img-account-profile rounded-circle mb-2" src="@ProfilePictureFilePath" alt="">
                     <!-- Profile picture help block-->
-                    <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
+                    <div class="small font-italic text-muted mb-4"></div>
                     <!-- Profile picture upload button-->
                     <button class="btn btn-primary" type="button" id="uploadButton">Yeni Resim Ekle</button>
                 </div>
@@ -113,11 +117,13 @@
             <div class="card mb-4">
                 <div class="card-header">Hesap Bilgileri</div>
                 <div class="card-body">
-                    <form>
+                    
+                        <div asp-validation-summary="All" class="text-danger"></div>
                         <!-- Form Group (username)-->
                         <div class="mb-3">
                             <label class="small mb-1" for="inputUsername">Takma İsim</label>
                             <input class="form-control" id="modal1nick_name" type="text" placeholder="Takma isminizi giriniz" value="@nick_name">
+                            <span asp-validation-for="nick_name" class="text-danger"></span>
                         </div>
                         <!-- Form Row-->
                         <div class="row gx-3 mb-3">
@@ -125,17 +131,19 @@
                             <div class="col-md-6">
                                 <label class="small mb-1" for="inputFirstName">Email</label>
                                 <input class="form-control" id="modal1email" type="email" placeholder="E-mail adresinizi giriniz" value="@email">
+                                <span asp-validation-for="email" class="text-danger"></span>
                             </div>
                             <!-- Form Group (last name)-->
                             <div class="col-md-6">
                                 <label class="small mb-1" for="inputLastName">Şifre</label>
                                 <input class="form-control" id="modal1password" type="password" placeholder="Şifrenizi Giriniz" value="@password">
+                                <span asp-validation-for="password" class="text-danger validError"></span>
                             </div>
                         </div>
                         
                         <!-- Save changes button-->
                         <button class="btn btn-primary saveButton" type="button">Kaydet</button>
-                    </form>
+                   
                 </div>
             </div>
         </div>
@@ -181,23 +189,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
 <script>
@@ -216,6 +207,7 @@
                 url: "/User/EditUser",
                 data: { nick_name: newNick_name, email: newEmail, password: newPassword, currentId: @id },
                 success: function (response) {
+                    console.log(response);
                     if (response == "1") {
                         toastr.success('Başarıyla güncellendi', 'BAŞARILI')
                         console.log(response);
@@ -226,6 +218,12 @@
                     }
                     else {
                         toastr.error('Kullanıcı Bulunamadı', 'HATA')
+                        
+                            for (var error in response.errors) {
+                                console.log(response.errors);
+                            $(".validError").append("<p>" + response.errors + "</p>");
+                            }
+                        
                     }
 
                 }

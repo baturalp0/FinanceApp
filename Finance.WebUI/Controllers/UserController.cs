@@ -11,7 +11,7 @@ namespace Finance.WebUI.Controllers
     {
         Log log;
 
-        private readonly DatabaseContext _context;
+        private readonly DatabaseContext _context; //Global değişkenler _ ile başlasa iyi olur. Best Practice'e göre bu şekilde.
         //readOnly bu değişkene sadece burada değer atanabileceğini gösterir. Sanırım bu _context Dependency Injectionla alakalı.
 
         public UserController(DatabaseContext context)
@@ -74,6 +74,11 @@ namespace Finance.WebUI.Controllers
 
             if (user != null)
             {
+
+
+
+
+
                 //Session'a bilgileri atıyoruz.
                 HttpContext.Session.SetInt32("id", user.id);
                 HttpContext.Session.SetString("nick_name", user.nick_name);

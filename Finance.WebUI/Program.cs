@@ -5,38 +5,11 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddTransient<IValidator<User>, UserValidator>();
-builder.Services.AddControllersWithViews()
-   .AddSessionStateTempDataProvider();
 
 
-builder.Services.AddFluentValidation(conf =>
-{
-    conf.RegisterValidatorsFromAssembly(typeof(Program).Assembly);
-    conf.AutomaticValidationEnabled = false;
-});
-
-
-builder.Services.AddDistributedMemoryCache();
-
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options =>
-    {
-        options.Cookie.SameSite = SameSiteMode.Lax; // veya SameSiteMode.Strict
-        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-        options.Cookie.IsEssential = true;
-        options.ExpireTimeSpan = TimeSpan.FromDays(7);
-    });
-
-builder.Services.AddSession(options =>
-{
-    options.Cookie.SameSite = SameSiteMode.Lax; // veya SameSiteMode.Strict
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-    options.Cookie.IsEssential = true;
-    options.IdleTimeout = TimeSpan.FromDays(7);
-});
 
 
 
@@ -54,7 +27,62 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("LocalConnection"));
 });
+
+
+builder.Services.AddTransient<IValidator<User>, UserValidator>();
+builder.Services.AddTransient<IValidator<Amount>, AmountValidator>();
+
+builder.Services.AddFluentValidation(conf =>
+{
+    conf.RegisterValidatorsFromAssembly(typeof(Program).Assembly);
+    conf.AutomaticValidationEnabled = false;
+});
+
+
+builder.Services.AddDistributedMemoryCache();
+
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie = new()
+    {
+        Name = "IdentityCookie",
+        HttpOnly = true,
+        SameSite = SameSiteMode.Lax,
+        SecurePolicy = CookieSecurePolicy.Always
+    };
+    options.SlidingExpiration = true;
+    options.ExpireTimeSpan = TimeSpan.FromDays(30);
+});
+
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);//We set Time here 
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
